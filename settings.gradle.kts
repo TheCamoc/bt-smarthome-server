@@ -1,0 +1,1 @@
+rootProject.name = "com.thecamoc.bt-smarthome-server"
