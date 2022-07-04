@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 import json
-
+import sys
 
 def on_connect(cl, userdata, flags, rc):
     if rc == 0:
@@ -23,10 +23,12 @@ def on_message(cl, userdata, msg):
 
 
 mqtt.Client.connected_flag = False
-broker = "192.168.99.5"
+broker = "127.0.0.1"
 client = mqtt.Client("backend")
 client.on_connect = on_connect
 client.on_message = on_message
 # client.username_pw_set(username="your mqtt username", password="your mqtt password")
-print("Connecting to broker ", broker)
-client.connect(broker)
+
+if 'smarthome.wsgi:application' in sys.argv:
+    print("Connecting to broker ", broker)
+    client.connect(broker)

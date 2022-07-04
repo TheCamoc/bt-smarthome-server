@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import sys
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -26,7 +27,8 @@ from backend import views
 from backend import mqtt
 from smarthome import settings
 
-mqtt.client.loop_start()
+if 'smarthome.wsgi:application' in sys.argv:
+    mqtt.client.loop_start()
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
