@@ -24,10 +24,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 try:
     SECRET_KEY = open('/database/secret.key').read()
 except FileNotFoundError:
-    SECRET_KEY = ""
+    SECRET_KEY = "a"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
+
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000  # Enable HTTP Strict Transport Security
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = ['*']
 
