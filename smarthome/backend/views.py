@@ -54,7 +54,8 @@ class SwitchViewSet(viewsets.ModelViewSet):
     serializer_class = SwitchSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    # @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
-    # def get(self, request, *args, **kwargs):
-    #     device = self.get_object()
-    #     return Response(device)
+    @action(detail=True, methods=['put'])
+    def send_mqtt(self, request, *args, **kwargs):
+        print("hello")
+        device = self.get_object()
+        return Response(device)
