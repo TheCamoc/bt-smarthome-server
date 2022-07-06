@@ -2,6 +2,7 @@ from django.db import models
 from . import mqtt
 import json
 
+
 class Room(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
 
