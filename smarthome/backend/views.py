@@ -48,9 +48,3 @@ class SwitchViewSet(viewsets.ModelViewSet):
     """
     queryset = Switch.objects.all()
     serializer_class = SwitchSerializer
-
-    @action(detail=True, methods=['put'])
-    def send_mqtt(self, request, *args, **kwargs):
-        print("hello")
-        device = self.get_object()
-        return Response(device)
