@@ -33,6 +33,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'devices', views.DeviceViewSet)
 router.register(r'switches', views.SwitchViewSet)
+router.register(r'lights', views.LightViewSet)
 router.register(r'rooms', views.RoomViewSet)
 
 urlpatterns = [

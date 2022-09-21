@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from backend.models import Device, Switch, Room
+from backend.models import Device, Switch, Room, Light
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,3 +32,10 @@ class SwitchSerializer(serializers.ModelSerializer):
         model = Switch
         fields = ['url', 'name', 'state', 'mqtt_topic', 'room']
         read_only_fields = ['name', 'mqtt_topic', 'room']
+
+
+class LightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Light
+        fields = ['url', 'name', 'state', 'mqtt_topic', 'room', 'r', 'g', 'b', 'w', 'has_white_led']
+        read_only_fields = ['name', 'mqtt_topic', 'room', 'has_white_led']

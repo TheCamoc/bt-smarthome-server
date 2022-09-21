@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from backend.serializers import UserSerializer, GroupSerializer, DeviceSerializer, SwitchSerializer, RoomSerializer
-from backend.models import Device, Switch, Room
+from backend.serializers import UserSerializer, GroupSerializer, DeviceSerializer, SwitchSerializer, RoomSerializer, \
+    LightSerializer
+from backend.models import Device, Switch, Room, Light
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -28,7 +29,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class RoomViewSet(viewsets.ModelViewSet):
     """
-    API endpoint to view and modify Devices
+    API endpoint to view and modify Rooms
     """
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
@@ -44,7 +45,15 @@ class DeviceViewSet(viewsets.ModelViewSet):
 
 class SwitchViewSet(viewsets.ModelViewSet):
     """
-    API endpoint to view and modify Devices
+    API endpoint to view and modify Switches
     """
     queryset = Switch.objects.all()
     serializer_class = SwitchSerializer
+
+
+class LightViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint to view and modify Lights
+    """
+    queryset = Light.objects.all()
+    serializer_class = LightSerializer
