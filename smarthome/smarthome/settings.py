@@ -20,21 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
     SECRET_KEY = open('/database/secret.key').read()
 except FileNotFoundError:
-    SECRET_KEY = "a"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
-
-if not DEBUG:
-    SECURE_HSTS_SECONDS = 31536000  # Enable HTTP Strict Transport Security
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    if DEBUG:
+        SECRET_KEY = "a"
+    else:
+        exit(-1)
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,11 +84,15 @@ WSGI_APPLICATION = 'smarthome.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+if DEBUG:
+    DB_FILE_LOCATION = 'db.sqlite3'
+else:
+    DB_FILE_LOCATION = '/database/db.sqlite3'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/database/db.sqlite3',
+        'NAME': DB_FILE_LOCATION,
     }
 }
 
@@ -144,9 +144,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-    'DEFAULT_RENDERER_CLASSES':  [
-        'rest_framework.renderers.JSONRenderer'
     ]
 }
 
@@ -154,3 +151,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7)
 }
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
