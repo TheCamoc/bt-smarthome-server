@@ -23,14 +23,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000  # Enable HTTP Strict Transport Security
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
     SECRET_KEY = open('/database/secret.key').read()
 except FileNotFoundError:
-    if DEBUG:
-        SECRET_KEY = "a"
-    else:
-        exit(-1)
+    SECRET_KEY = "a"
 
 ALLOWED_HOSTS = ['*']
 
