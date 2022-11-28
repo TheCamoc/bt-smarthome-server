@@ -1,15 +1,28 @@
 from django.db import models
+from django.db.models import UniqueConstraint
+
 from . import mqtt
 import json
 
 
 class Room(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Device(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name', 'room'], name='unique_device')
+        ]
+
+    name = models.CharField(max_length=100)
     room = models.ForeignKey(Room, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return "{0}: {1}".format(self.room, self.name)
 
 
 class Switch(Device):
