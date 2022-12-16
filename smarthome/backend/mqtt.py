@@ -17,6 +17,6 @@ broker = "127.0.0.1"
 client = mqtt.Client("backend{0}".format(random.randint(0, 200)))
 client.on_connect = on_connect
 
-if 'smarthome.wsgi:application' or 'runserver' in sys.argv:
+if 'smarthome.wsgi:application' in sys.argv:
     print("Connecting to broker ", broker)
     client.connect(broker)

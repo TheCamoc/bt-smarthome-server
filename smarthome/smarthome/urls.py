@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
 from backend import views
 from backend import mqtt
 
-if 'smarthome.wsgi:application' or 'runserver' in sys.argv:
+if 'smarthome.wsgi:application' in sys.argv:
     mqtt.client.loop_start()
 
 router = routers.DefaultRouter()
