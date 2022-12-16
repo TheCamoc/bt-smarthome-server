@@ -34,7 +34,8 @@ if not DEBUG:
 try:
     SECRET_KEY = open('/database/secret.key').read()
 except FileNotFoundError:
-    SECRET_KEY = "a"
+    if DEBUG:
+        SECRET_KEY = "a"
 
 ALLOWED_HOSTS = ['*']
 
@@ -142,9 +143,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_PERMISSION_CLASS = 'rest_framework.permissions.IsAuthenticated'
+if DEBUG:
+    REST_PERMISSION_CLASS = 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        REST_PERMISSION_CLASS
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',

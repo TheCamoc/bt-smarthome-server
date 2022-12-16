@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from backend.serializers import UserSerializer, GroupSerializer, DeviceSerializer, SwitchSerializer, RoomSerializer, \
-    LightSerializer
-from backend.models import Device, Switch, Room, Light
+    LightSerializer, SensorSerializer
+from backend.models import Device, Switch, Room, Light, Sensor
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -57,3 +57,11 @@ class LightViewSet(viewsets.ModelViewSet):
     """
     queryset = Light.objects.all()
     serializer_class = LightSerializer
+
+
+class SensorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint to view and modify Lights
+    """
+    queryset = Sensor.objects.all()
+    serializer_class = SensorSerializer

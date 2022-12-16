@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
 from backend import views
 from backend import mqtt
 
-if 'smarthome.wsgi:application' in sys.argv:
+if 'smarthome.wsgi:application' or 'runserver' in sys.argv:
     mqtt.client.loop_start()
 
 router = routers.DefaultRouter()
@@ -34,6 +34,7 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'devices', views.DeviceViewSet)
 router.register(r'switches', views.SwitchViewSet)
 router.register(r'lights', views.LightViewSet)
+router.register(r'sensors', views.SensorViewSet)
 router.register(r'rooms', views.RoomViewSet)
 
 urlpatterns = [
