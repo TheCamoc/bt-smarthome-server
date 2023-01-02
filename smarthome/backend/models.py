@@ -69,21 +69,44 @@ class Sensor(Device):
     air_quality = models.PositiveSmallIntegerField(blank=True, null=True)
 
 
+class Thermostat(Device):
+    state = models.BooleanField()
+    mqtt_topic = models.CharField(max_length=100)
+    target_temperature = models.DecimalField(decimal_places=2, max_digits=6, blank=True, null=True)
+    rel_sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        mqtt.client.publish(self.mqtt_topic, json.dumps({"state": self.state}))
+        super().save(*args, **kwargs)
+
+
 def on_message(cl, userdata, msg):
     topic = msg.topic
     try:
         payload = json.loads(msg.payload)
-        device = Sensor.objects.filter(mqtt_topic=topic).first()
-        if device is not None:
+        sensor = Sensor.objects.filter(mqtt_topic=topic).first()
+        if sensor is not None:
             if "temperature" in payload:
-                device.temperature = payload["temperature"]
+                sensor.temperature = payload["temperature"]
             if "humidity" in payload:
-                device.humidity = payload["humidity"]
+                sensor.humidity = payload["humidity"]
             if "pressure" in payload:
-                device.pressure = payload["pressure"]
+                sensor.pressure = payload["pressure"]
             if "air_quality" in payload:
-                device.air_quality = payload["air_quality"]
-            device.save()
+                sensor.air_quality = payload["air_quality"]
+            sensor.save()
+
+        thermostat = Thermostat.objects.filter(rel_sensor=sensor).first()
+        if thermostat is not None and sensor.temperature is not None:
+            new_state = None
+            if sensor.temperature < (thermostat.target_temperature - 1):
+                new_state = True
+            elif sensor.temperature > (thermostat.target_temperature + 1):
+                new_state = False
+
+            if new_state is not None and new_state != thermostat.state:
+                thermostat.state = new_state
+                thermostat.save()
     except JSONDecodeError as e:
         print("JSON Decode Error: ", e.msg)
     except InvalidOperation as e:
