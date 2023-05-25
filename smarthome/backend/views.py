@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from backend.serializers import UserSerializer, GroupSerializer, DeviceSerializer, SwitchSerializer, RoomSerializer, \
-    LightSerializer, SensorSerializer
-from backend.models import Device, Switch, Room, Light, Sensor
+from .serializers import UserSerializer, GroupSerializer, DeviceSerializer, SwitchSerializer, RoomSerializer, \
+    LightSerializer, SensorSerializer, FanSerializer
+from .models import Device, Switch, Room, Light, Sensor, Fan
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -65,3 +65,11 @@ class SensorViewSet(viewsets.ModelViewSet):
     """
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
+
+
+class FanViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint to view and modify Fans
+    """
+    queryset = Fan.objects.all()
+    serializer_class = FanSerializer

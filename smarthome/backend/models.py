@@ -80,6 +80,19 @@ class Thermostat(Device):
         super().save(*args, **kwargs)
 
 
+class Fan(Device):
+    state = models.BooleanField()
+    speed = models.PositiveSmallIntegerField()
+    mqtt_topic = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        if self.state:
+            mqtt.client.publish(self.mqtt_topic, json.dumps({"value": self.state}))
+        else:
+            mqtt.client.publish(self.mqtt_topic, json.dumps({"value": 0}))
+        super().save(*args, **kwargs)
+
+
 def on_message(cl, userdata, msg):
     topic = msg.topic
     try:
