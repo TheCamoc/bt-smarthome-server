@@ -36,6 +36,7 @@ router.register(r'switches', views.SwitchViewSet)
 router.register(r'lights', views.LightViewSet)
 router.register(r'sensors', views.SensorViewSet)
 router.register(r'rooms', views.RoomViewSet)
+router.register(r'thermostats', views.ThermostatViewSet)
 router.register(r'fans', views.FanViewSet)
 
 urlpatterns = [
