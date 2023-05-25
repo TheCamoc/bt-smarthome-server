@@ -1,5 +1,7 @@
 from json import JSONDecodeError
 from decimal import InvalidOperation
+
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -82,12 +84,15 @@ class Thermostat(Device):
 
 class Fan(Device):
     state = models.BooleanField()
-    speed = models.PositiveSmallIntegerField()
+    speed = models.PositiveSmallIntegerField(validators=[
+        MinValueValidator(0),
+        MaxValueValidator(100)
+    ])
     mqtt_topic = models.CharField(max_length=100)
 
     def save(self, *args, **kwargs):
         if self.state:
-            mqtt.client.publish(self.mqtt_topic, json.dumps({"value": self.state}))
+            mqtt.client.publish(self.mqtt_topic, json.dumps({"value": self.speed}))
         else:
             mqtt.client.publish(self.mqtt_topic, json.dumps({"value": 0}))
         super().save(*args, **kwargs)
