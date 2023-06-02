@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Device, Switch, Room, Light, Sensor, Fan, Thermostat
+from .models import Device, Switch, Room, Light, Sensor, Fan, Thermostat, Table
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -59,4 +59,11 @@ class FanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fan
         fields = ['url', 'name', 'state', 'speed', 'mqtt_topic', 'room']
+        read_only_fields = ['name', 'mqtt_topic', 'room']
+
+
+class TableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Table
+        fields = ['url', 'name', 'state', 'mqtt_topic', 'room']
         read_only_fields = ['name', 'mqtt_topic', 'room']

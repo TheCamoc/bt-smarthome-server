@@ -98,6 +98,18 @@ class Fan(Device):
         super().save(*args, **kwargs)
 
 
+class Table(Device):
+    state = models.BooleanField()
+    mqtt_topic = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        if self.state:
+            mqtt.client.publish(self.mqtt_topic, json.dumps({"state": "up"}))
+        else:
+            mqtt.client.publish(self.mqtt_topic, json.dumps({"state": "down"}))
+        super().save(*args, **kwargs)
+
+
 def on_message(cl, userdata, msg):
     topic = msg.topic
     try:
